@@ -24,11 +24,10 @@ export const createUser = createAsyncThunk("users/craete", async (userInfo) => {
 
 export const updateUser = createAsyncThunk(
   "users/update",
-  async (updatedUserInfo, userId) => {
-    console.log("id", userId);
+  async (updateInfo) => {
     const response = await axios.patch(
-      `${API_HOST}users/${userId}`,
-      updatedUserInfo
+      `${API_HOST}users/${updateInfo[0]}`,
+      updateInfo[1]
     );
     const data = response.data;
     return data;

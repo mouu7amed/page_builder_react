@@ -21,7 +21,8 @@ import { AccountSettings } from "./AccountSettings";
 export const Settings = () => {
   const [tabValue, setTabValue] = useState("1");
 
-  const { userName, userEmail, avatar, userAddress } = useOutletContext();
+  const { userUid, userName, userEmail, userPhone, avatar, userAddress } =
+    useOutletContext();
 
   return (
     <Box sx={{ backgroundColor: "white" }}>
@@ -107,14 +108,21 @@ export const Settings = () => {
                   value="1"
                   sx={{ padding: { md: "0 0 0 24px", xs: "24px 0 0 0" } }}
                 >
-                  <ProfileSettings avatar={avatar} userAddress={userAddress} />
+                  <ProfileSettings
+                    avatar={avatar}
+                    userAddress={userAddress}
+                    userUid={userUid}
+                  />
                 </TabPanel>
 
                 <TabPanel
                   value="2"
                   sx={{ padding: { sm: "0 0 0 24px", xs: "24px 0 0 0" } }}
                 >
-                  <AccountSettings userEmail={userEmail} />
+                  <AccountSettings
+                    userEmail={userEmail}
+                    userPhone={userPhone}
+                  />
                 </TabPanel>
 
                 <TabPanel

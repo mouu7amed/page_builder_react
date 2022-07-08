@@ -12,6 +12,7 @@ export const Dashboard = ({ title }) => {
   const [userUid, setUserUid] = useState("");
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
+  const [userPhone, setUserPhone] = useState("");
   const [avatar, setAvatar] = useState("");
   const [userAddress, setUserAddress] = useState([]);
 
@@ -34,6 +35,9 @@ export const Dashboard = ({ title }) => {
     }
     if (currentUser?.email) {
       setUserEmail(currentUser.email);
+    }
+    if (currentUser?.phone) {
+      setUserPhone(currentUser.phone);
     }
     if (currentUser?.avatar) {
       setAvatar(currentUser.avatar);
@@ -64,6 +68,7 @@ export const Dashboard = ({ title }) => {
               userUid,
               userName,
               userEmail,
+              userPhone,
               avatar,
               userAddress,
               pageState,

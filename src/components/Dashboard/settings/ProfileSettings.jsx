@@ -27,18 +27,16 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { DatePicker } from "@mui/x-date-pickers";
 import React, { forwardRef, useState } from "react";
 import { updateUser } from "../../../redux/features/user/userSlice";
-import { useAuth } from "../../../context/AuthProvider";
 import { useDispatch } from "react-redux";
 
 const SnackbarAlert = forwardRef(function SnackbarAlert(props, ref) {
   return <Alert ref={ref} elevation={2} {...props} />;
 });
 
-export const ProfileSettings = ({ avatar, userInfo }) => {
+export const ProfileSettings = ({ avatar, userInfo, userUid }) => {
   const [photoBuffer, setPhotoBuffer] = useState(null);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-
   const [changePhone, setChangePhone] = useState(false);
   const [expanded, setExpanded] = useState("NamePanel");
   const [snackBarOpen, setSnackBarOpen] = useState(false);
@@ -58,7 +56,6 @@ export const ProfileSettings = ({ avatar, userInfo }) => {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
-  const { currentUser } = useAuth();
 
   const handleExpandtion = (isExpanded, panel) => {
     setExpanded(isExpanded ? panel : false);
@@ -69,7 +66,7 @@ export const ProfileSettings = ({ avatar, userInfo }) => {
     const fullName = `${
       firstName.charAt(0).toUpperCase() + firstName.slice(1)
     } ${lastName.charAt(0).toUpperCase() + lastName.slice(1)}`;
-    const userId = currentUser._id;
+    const userId = userUid;
 
     if (!firstName && !lastName) {
       return;
@@ -95,8 +92,10 @@ export const ProfileSettings = ({ avatar, userInfo }) => {
       return;
     }
 
+    const updateInfo = [userId, { name: fullName }];
+
     try {
-      dispatch(updateUser({ name: fullName }, userId));
+      dispatch(updateUser(updateInfo));
     } catch (err) {
       console.log("Error, ", err.message);
     }
