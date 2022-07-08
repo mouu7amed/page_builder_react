@@ -26,10 +26,9 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { DatePicker } from "@mui/x-date-pickers";
 import React, { forwardRef, useState } from "react";
-import moment from "moment";
-import { useSelector, useDispatch } from "react-redux";
 import { updateUser } from "../../../redux/features/user/userSlice";
 import { useAuth } from "../../../context/AuthProvider";
+import { useDispatch } from "react-redux";
 
 const SnackbarAlert = forwardRef(function SnackbarAlert(props, ref) {
   return <Alert ref={ref} elevation={2} {...props} />;
@@ -39,7 +38,7 @@ export const ProfileSettings = ({ avatar, userInfo }) => {
   const [photoBuffer, setPhotoBuffer] = useState(null);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [phoneValue, setPhoneValue] = useState("");
+
   const [changePhone, setChangePhone] = useState(false);
   const [expanded, setExpanded] = useState("NamePanel");
   const [snackBarOpen, setSnackBarOpen] = useState(false);
@@ -56,15 +55,9 @@ export const ProfileSettings = ({ avatar, userInfo }) => {
     phone: "",
     birthday: "",
   });
-  const [loading, setLoading] = useState({
-    info: false,
-    photo: false,
-    birthday: false,
-  });
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
-  const userState = useSelector((state) => state.user);
-  const { users } = userState;
   const { currentUser } = useAuth();
 
   const handleExpandtion = (isExpanded, panel) => {
@@ -76,6 +69,7 @@ export const ProfileSettings = ({ avatar, userInfo }) => {
     const fullName = `${
       firstName.charAt(0).toUpperCase() + firstName.slice(1)
     } ${lastName.charAt(0).toUpperCase() + lastName.slice(1)}`;
+    const userId = currentUser._id;
 
     if (!firstName && !lastName) {
       return;
@@ -100,76 +94,44 @@ export const ProfileSettings = ({ avatar, userInfo }) => {
       setLastName("");
       return;
     }
-  };
-
-  const updatePhoneHandler = () => {
-    //Phone Validation
-    if (
-      phoneValue &&
-      !phoneValue.match(/^\(?([0-9]{4})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/)
-    ) {
-      setValidationError({
-        ...validationError,
-        phone: "Enter a valid phone number",
-      });
-      return;
-    }
-
-    const updatedUserInfo = { phone: phoneValue };
 
     try {
-      dispatch(updateUser(updatedUserInfo, currentUser._id));
-    } catch {
-      console.log("Error updating your phone number!");
+      dispatch(updateUser({ name: fullName }, userId));
+    } catch (err) {
+      console.log("Error, ", err.message);
     }
+
+    setFirstName("");
+    setLastName("");
   };
 
   const changePhotoHandler = async () => {
     try {
       setError("");
-      setLoading({
-        ...loading,
-        photo: true,
-      });
+      setLoading(true);
       // TODO
     } catch {
       console.log(error);
     }
 
     setPhotoBuffer(null);
-    setLoading({
-      ...loading,
-      photo: false,
-    });
+    setLoading(false);
   };
 
   const updateInfoHandler = async () => {
     try {
-      setLoading({
-        ...loading,
-        info: true,
-      });
+      setLoading(true);
       setError("");
       setValidationError("");
 
       if (firstName && lastName) {
         //TODO
       }
-
-      if (phoneValue) {
-        //TODO
-      }
     } catch (error) {
       console.log(error.message);
     }
 
-    setFirstName("");
-    setLastName("");
-    setPhoneValue("");
-    setLoading({
-      ...loading,
-      info: false,
-    });
+    setLoading(false);
   };
 
   const changeBioHandler = async () => {
@@ -179,10 +141,7 @@ export const ProfileSettings = ({ avatar, userInfo }) => {
 
     try {
       setValidationError("");
-      setLoading({
-        ...loading,
-        bio: true,
-      });
+      setLoading(true);
 
       //TODO
     } catch (error) {
@@ -192,10 +151,7 @@ export const ProfileSettings = ({ avatar, userInfo }) => {
     setAdditionalInfo({
       birthday: "",
     });
-    setLoading({
-      ...loading,
-      bio: false,
-    });
+    setLoading(false);
   };
 
   return (

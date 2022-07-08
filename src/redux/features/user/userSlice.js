@@ -25,7 +25,8 @@ export const createUser = createAsyncThunk("users/craete", async (userInfo) => {
 export const updateUser = createAsyncThunk(
   "users/update",
   async (updatedUserInfo, userId) => {
-    const response = await axios.post(
+    console.log("id", userId);
+    const response = await axios.patch(
       `${API_HOST}users/${userId}`,
       updatedUserInfo
     );
