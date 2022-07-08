@@ -2,6 +2,8 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchUsers } from "../redux/features/user/userSlice";
+import storage from "../utils/firebaseStorage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const AuthContext = createContext(null);
 
@@ -44,8 +46,15 @@ export const AuthProvider = ({ children }) => {
     navigate("/login", { replace: true });
   };
 
+  const changeAvatar = async (file) => {
+    const fileRef = ref(storage, `avatars/${currentUser._id}/${file.name}.png`);
+    const img = await uploadBytes(fileRef, file);
+    const imgUrl = await getDownloadURL(img.ref);
+    return imgUrl;
+  };
+
   return (
-    <AuthContext.Provider value={{ currentUser, login, logout }}>
+    <AuthContext.Provider value={{ currentUser, login, logout, changeAvatar }}>
       {!loading && children}
     </AuthContext.Provider>
   );

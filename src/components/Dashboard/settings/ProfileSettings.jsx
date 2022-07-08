@@ -28,6 +28,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import React, { forwardRef, useState } from "react";
 import { updateUser } from "../../../redux/features/user/userSlice";
 import { useDispatch } from "react-redux";
+import { useAuth } from "../../../context/AuthProvider";
 
 const SnackbarAlert = forwardRef(function SnackbarAlert(props, ref) {
   return <Alert ref={ref} elevation={2} {...props} />;
@@ -35,11 +36,12 @@ const SnackbarAlert = forwardRef(function SnackbarAlert(props, ref) {
 
 export const ProfileSettings = ({ avatar, userInfo, userUid }) => {
   const [photoBuffer, setPhotoBuffer] = useState(null);
+  const [tempAvatar, setTempAvatar] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [changePhone, setChangePhone] = useState(false);
   const [expanded, setExpanded] = useState("NamePanel");
   const [snackBarOpen, setSnackBarOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [additionalInfo, setAdditionalInfo] = useState({
     birthday: "",
@@ -53,8 +55,8 @@ export const ProfileSettings = ({ avatar, userInfo, userUid }) => {
     phone: "",
     birthday: "",
   });
-  const [loading, setLoading] = useState(false);
 
+  const { changeAvatar } = useAuth();
   const dispatch = useDispatch();
 
   const handleExpandtion = (isExpanded, panel) => {
@@ -105,51 +107,37 @@ export const ProfileSettings = ({ avatar, userInfo, userUid }) => {
   };
 
   const changePhotoHandler = async () => {
-    try {
-      setError("");
-      setLoading(true);
-      // TODO
-    } catch {
-      console.log(error);
+    if (!photoBuffer) {
+      return;
     }
 
-    setPhotoBuffer(null);
+    try {
+      setLoading(true);
+
+      await changeAvatar(photoBuffer)
+        .then(async (url) => {
+          setTempAvatar(url);
+          dispatch(updateUser([userUid, { avatar: url }]));
+          setSnackBarOpen(true);
+        })
+        .catch((err) => console.log(err.message));
+    } catch {
+      console.log("Error changing your cover!");
+    }
+
+    setPhotoBuffer("");
     setLoading(false);
   };
 
   const updateInfoHandler = async () => {
     try {
       setLoading(true);
-      setError("");
-      setValidationError("");
-
-      if (firstName && lastName) {
-        //TODO
-      }
+      setError({});
+      setValidationError({});
     } catch (error) {
       console.log(error.message);
     }
 
-    setLoading(false);
-  };
-
-  const changeBioHandler = async () => {
-    if (!additionalInfo.birthday) {
-      return;
-    }
-
-    try {
-      setValidationError("");
-      setLoading(true);
-
-      //TODO
-    } catch (error) {
-      console.log(error.message);
-    }
-
-    setAdditionalInfo({
-      birthday: "",
-    });
     setLoading(false);
   };
 
@@ -186,7 +174,9 @@ export const ProfileSettings = ({ avatar, userInfo, userUid }) => {
                       disabled={loading.info}
                       type="text"
                       value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
+                      onChange={(e) => {
+                        setFirstName(e.target.value);
+                      }}
                       error={!!validationError.firstName}
                       helperText={
                         !!validationError.firstName && validationError.firstName
@@ -238,16 +228,16 @@ export const ProfileSettings = ({ avatar, userInfo, userUid }) => {
               </Typography>
               <Box sx={{ position: "relative" }}>
                 <Avatar
-                  src={avatar}
+                  src={avatar ? avatar : tempAvatar}
                   alt="avatar"
                   sx={{ width: 200, height: 200 }}
                 />
                 <Fade
-                  in={loading.photo}
+                  in={loading}
                   sx={{
                     position: "absolute",
                     top: "40%",
-                    left: "40%",
+                    left: "10%",
                   }}
                 >
                   <CircularProgress />
@@ -394,7 +384,7 @@ export const ProfileSettings = ({ avatar, userInfo, userUid }) => {
               variant="contained"
               color="success"
               disableElevation
-              onClick={changeBioHandler}
+              onClick={updateInfoHandler}
             >
               Save
             </Button>

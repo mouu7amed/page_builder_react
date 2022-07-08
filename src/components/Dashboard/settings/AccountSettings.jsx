@@ -15,14 +15,14 @@ import {
 import React, { forwardRef, useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { updateUser } from "../../../redux/features/user/userSlice";
-import { useAuth } from "../../../context/AuthProvider";
 import { useDispatch } from "react-redux";
+import { useAuth } from "../../../context/AuthProvider";
 
 const SnackbarAlert = forwardRef(function SnackbarAlert(props, ref) {
   return <Alert ref={ref} elevation={2} {...props} />;
 });
 
-export const AccountSettings = ({ userEmail, userPhone }) => {
+export const AccountSettings = ({ userEmail, userPhone, userUid }) => {
   const [phoneValue, setPhoneValue] = useState("");
   const [changePhone, setChangePhone] = useState(false);
   const [expanded, setExpanded] = useState("NamePanel");
@@ -62,14 +62,20 @@ export const AccountSettings = ({ userEmail, userPhone }) => {
       return;
     }
 
-    const userId = currentUser._id;
-    const updateInfo = [userId, { phone: phoneValue }];
+    const updateInfo = [userUid, { phone: phoneValue }];
 
     try {
+      setLoading(true);
+      setError({});
       dispatch(updateUser(updateInfo));
     } catch {
-      console.log("Error updating your phone number!");
+      setError({
+        ...error,
+        phone: "Error updating your phone number",
+      });
     }
+    setLoading(false);
+    setPhoneValue("");
   };
 
   const changePasswordHandler = () => {
@@ -77,11 +83,21 @@ export const AccountSettings = ({ userEmail, userPhone }) => {
       return;
     }
 
+    if (currentPassword !== currentUser?.password) {
+      setError({
+        ...error,
+        invalidCurrentPassword: "Invalid Password",
+        newPasswordLength: "",
+        newPasswordNoMatch: "",
+      });
+      return;
+    }
+
     if (newPassword.length < 8) {
       setError({
         ...error,
         invalidCurrentPassword: "",
-        newPasswordLength: "Password must be at least 6 digits",
+        newPasswordLength: "Password must be at least 8 digits",
         newPasswordNoMatch: "",
       });
       return;
@@ -97,8 +113,27 @@ export const AccountSettings = ({ userEmail, userPhone }) => {
       return;
     }
 
+    if (newPassword && reNewPassword === currentUser.password) {
+      setError({
+        ...error,
+        invalidCurrentPassword: "",
+        newPasswordLength: "Please choose another password",
+        newPasswordNoMatch: "",
+      });
+      return;
+    }
+
     try {
-    } catch {}
+      setLoading(true);
+      setError({});
+      dispatch(updateUser([userUid, { password: newPassword }]));
+    } catch {
+      console.log("Error Changing your photo.");
+    }
+    setLoading(false);
+    setCurrentPassword("");
+    setNewPassword("");
+    setReNewPassword("");
   };
 
   return (

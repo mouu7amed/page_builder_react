@@ -122,6 +122,7 @@ export const Settings = () => {
                   <AccountSettings
                     userEmail={userEmail}
                     userPhone={userPhone}
+                    userUid={userUid}
                   />
                 </TabPanel>
 
