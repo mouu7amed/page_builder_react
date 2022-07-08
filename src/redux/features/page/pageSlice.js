@@ -1,0 +1,64 @@
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import { API_HOST } from "../../../api";
+
+const initialState = {
+  loading: false,
+  pages: [],
+  error: "",
+  createPgaeLoading: false,
+  createPageError: "",
+};
+
+export const fetchPages = createAsyncThunk("pages/fetch", async () => {
+  const response = await axios.get(`${API_HOST}pages/`);
+  const data = await response.data;
+  return data;
+});
+
+export const createPage = createAsyncThunk("page/create", async (pageInfo) => {
+  const response = await axios.post(`${API_HOST}pages/`, pageInfo);
+  const data = await response.data;
+  return data;
+});
+
+const pageSlice = createSlice({
+  name: "pages",
+  initialState,
+  extraReducers: (builder) => {
+    //GET
+    builder.addCase(fetchPages.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(fetchPages.fulfilled, (state, action) => {
+      state.loading = false;
+      state.pages = action.payload;
+      state.error = "";
+    });
+
+    builder.addCase(fetchPages.rejected, (state, action) => {
+      state.loading = false;
+      state.pages = [];
+      state.error = action.payload;
+    });
+
+    //POST
+    builder.addCase(createPage.pending, (state) => {
+      state.createPgaeLoading = true;
+    });
+
+    builder.addCase(createPage.fulfilled, (state, action) => {
+      state.createPgaeLoading = false;
+      state.pages.push(action.payload);
+      state.createPageError = "";
+    });
+
+    builder.addCase(createPage.rejected, (state, action) => {
+      state.createPgaeLoading = false;
+      state.createPageError = action.payload;
+    });
+  },
+});
+
+export default pageSlice.reducer;
