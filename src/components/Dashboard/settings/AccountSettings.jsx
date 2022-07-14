@@ -25,7 +25,7 @@ const SnackbarAlert = forwardRef(function SnackbarAlert(props, ref) {
 export const AccountSettings = ({ userEmail, userPhone, userUid }) => {
   const [phoneValue, setPhoneValue] = useState("");
   const [changePhone, setChangePhone] = useState(false);
-  const [expanded, setExpanded] = useState("NamePanel");
+  const [expanded, setExpanded] = useState("EmailPanel");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [reNewPassword, setReNewPassword] = useState("");
@@ -68,6 +68,10 @@ export const AccountSettings = ({ userEmail, userPhone, userUid }) => {
       setLoading(true);
       setError({});
       dispatch(updateUser(updateInfo));
+      setSnackBarOpen(true);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch {
       setError({
         ...error,
@@ -127,6 +131,10 @@ export const AccountSettings = ({ userEmail, userPhone, userUid }) => {
       setLoading(true);
       setError({});
       dispatch(updateUser([userUid, { password: newPassword }]));
+      setSnackBarOpen(true);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch {
       console.log("Error Changing your photo.");
     }
@@ -312,8 +320,8 @@ export const AccountSettings = ({ userEmail, userPhone, userUid }) => {
             }}
           >
             {!error.invalidCurrentPassword
-              ? "Password changed successfully!"
-              : "Error changing your password!"}
+              ? "Settings changed successfully!"
+              : "Error changing your settings!"}
           </SnackbarAlert>
         </Snackbar>
       </Stack>

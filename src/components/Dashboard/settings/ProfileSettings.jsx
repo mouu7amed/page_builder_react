@@ -25,10 +25,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { DatePicker } from "@mui/x-date-pickers";
-import React, { forwardRef, useState } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import { updateUser } from "../../../redux/features/user/userSlice";
 import { useDispatch } from "react-redux";
 import { useAuth } from "../../../context/AuthProvider";
+import moment from "moment";
 
 const SnackbarAlert = forwardRef(function SnackbarAlert(props, ref) {
   return <Alert ref={ref} elevation={2} {...props} />;
@@ -70,7 +71,7 @@ export const ProfileSettings = ({ avatar, userInfo, userUid }) => {
     } ${lastName.charAt(0).toUpperCase() + lastName.slice(1)}`;
     const userId = userUid;
 
-    if (!firstName && !lastName) {
+    if (!firstName || !lastName) {
       return;
     }
 
@@ -98,6 +99,10 @@ export const ProfileSettings = ({ avatar, userInfo, userUid }) => {
 
     try {
       dispatch(updateUser(updateInfo));
+      setSnackBarOpen(true);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (err) {
       console.log("Error, ", err.message);
     }
@@ -113,12 +118,14 @@ export const ProfileSettings = ({ avatar, userInfo, userUid }) => {
 
     try {
       setLoading(true);
-
       await changeAvatar(photoBuffer)
         .then(async (url) => {
           setTempAvatar(url);
           dispatch(updateUser([userUid, { avatar: url }]));
           setSnackBarOpen(true);
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         })
         .catch((err) => console.log(err.message));
     } catch {
@@ -130,10 +137,44 @@ export const ProfileSettings = ({ avatar, userInfo, userUid }) => {
   };
 
   const updateInfoHandler = async () => {
+    if (
+      !additionalInfo.birthday &&
+      !additionalInfo.address &&
+      !additionalInfo.gender
+    ) {
+      return;
+    }
+
     try {
       setLoading(true);
-      setError({});
+      setError("");
       setValidationError({});
+
+      if (additionalInfo.birthday) {
+        const age = parseInt(
+          moment(additionalInfo.birthday, "YYYYMMDD").fromNow().slice(0, 2)
+        );
+        dispatch(updateUser([userUid, { age: age }]));
+      }
+
+      if (additionalInfo.address) {
+        const addresses = [
+          {
+            details: additionalInfo.address,
+            addrType: additionalInfo.addressType,
+          },
+        ];
+        dispatch(updateUser([userUid, { addresses: addresses }]));
+      }
+
+      if (additionalInfo.gender) {
+        dispatch(updateUser([userUid, { gender: additionalInfo.gender }]));
+      }
+
+      setSnackBarOpen(true);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       console.log(error.message);
     }

@@ -3,10 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPages } from "../../redux/features/page/pageSlice";
-import { ListPages } from "./Pages/ListPages";
-import { AddPage } from "./Pages/AddPage";
 import { Navbar } from "./components/NavBar";
 import { useAuth } from "../../context/AuthProvider";
+import { AddPage } from "./components/AddPage";
 
 export const Dashboard = ({ title }) => {
   const [userUid, setUserUid] = useState("");
@@ -60,7 +59,6 @@ export const Dashboard = ({ title }) => {
             p={2}
           >
             <AddPage pageState={pageState} />
-            <ListPages pageState={pageState} userUid={userUid} />
           </Box>
         ) : (
           <Outlet

@@ -22,6 +22,12 @@ export const createPage = createAsyncThunk("page/create", async (pageInfo) => {
   return data;
 });
 
+export const deletePage = createAsyncThunk("page/delete", async (pageId) => {
+  const response = await axios.delete(`${API_HOST}pages/${pageId}`);
+  const data = await response.data;
+  return data;
+});
+
 const pageSlice = createSlice({
   name: "pages",
   initialState,

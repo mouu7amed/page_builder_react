@@ -17,12 +17,20 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import BrushOutlinedIcon from "@mui/icons-material/BrushOutlined";
 import { ProfileSettings } from "./ProfileSettings";
 import { AccountSettings } from "./AccountSettings";
+import { PagesSettings } from "./PagesSettings";
 
 export const Settings = () => {
   const [tabValue, setTabValue] = useState("1");
 
-  const { userUid, userName, userEmail, userPhone, avatar, userAddress } =
-    useOutletContext();
+  const {
+    userUid,
+    userName,
+    userEmail,
+    userPhone,
+    avatar,
+    userAddress,
+    pageState,
+  } = useOutletContext();
 
   return (
     <Box sx={{ backgroundColor: "white" }}>
@@ -130,7 +138,7 @@ export const Settings = () => {
                   value="3"
                   sx={{ padding: { sm: "0 0 0 24px", xs: "24px 0 0 0" } }}
                 >
-                  <Typography>Pages</Typography>
+                  <PagesSettings userUid={userUid} pageState={pageState} />
                 </TabPanel>
               </Stack>
             </Stack>
