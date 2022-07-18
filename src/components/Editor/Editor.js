@@ -24,8 +24,12 @@ const Editor = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        urlStore: `${API_HOST}pages/${pageId}/content`,
-        urlLoad: `${API_HOST}pages/${pageId}/content`,
+        options: {
+          remote: {
+            urlStore: `${API_HOST}pages/${pageId}/content`,
+            urlLoad: `${API_HOST}pages/${pageId}/content`,
+          },
+        },
       },
       plugins: [gjsPresetWebage],
       pluginsOpts: {
