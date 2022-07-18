@@ -183,7 +183,7 @@ export const PagesSettings = ({ userUid, pageState }) => {
             setSnackBarOpen(false);
           }}
         >
-          {!error.invalidCurrentPassword ? "Page deleted successfully!" : error}
+          {!error ? "Page deleted successfully!" : error}
         </SnackbarAlert>
       </Snackbar>
     </>

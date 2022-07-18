@@ -71,11 +71,7 @@ export const Profile = () => {
               />
 
               <Stack alignItems={{ sm: "flex-start", xs: "center" }}>
-                <Typography
-                  variant="body"
-                  fontSize={{ sm: 18, xs: 16 }}
-                  fontWeight={600}
-                >
+                <Typography fontSize={{ sm: 18, xs: 16 }} fontWeight={600}>
                   {userName}
                 </Typography>
                 <Typography

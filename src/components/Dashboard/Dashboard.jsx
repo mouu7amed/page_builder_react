@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -6,6 +6,8 @@ import { fetchPages } from "../../redux/features/page/pageSlice";
 import { Navbar } from "./components/NavBar";
 import { useAuth } from "../../context/AuthProvider";
 import { AddPage } from "./components/AddPage";
+import { ControlPages } from "./components/ControlPages";
+import { Container } from "@mui/system";
 
 export const Dashboard = ({ title }) => {
   const [userUid, setUserUid] = useState("");
@@ -48,18 +50,25 @@ export const Dashboard = ({ title }) => {
 
   return (
     <>
-      <Box sx={{ backgroundColor: "#E4F2FD", minHeight: "100vh" }}>
+      <Box
+        sx={{
+          backgroundColor:
+            location.pathname === "/dashboard/profile" ? "#E4F2FD" : "white",
+          minHeight: "100vh",
+        }}
+      >
         <Navbar userName={userName} avatar={avatar} />
         {location.pathname === "/dashboard" ? (
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="column"
-            p={2}
-          >
-            <AddPage pageState={pageState} />
-          </Box>
+          <Container>
+            <Grid container spacing={3} p={2}>
+              <Grid item xs={12} sm={6}>
+                <AddPage pageState={pageState} />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <ControlPages />
+              </Grid>
+            </Grid>
+          </Container>
         ) : (
           <Outlet
             context={{

@@ -4,6 +4,9 @@ import { Login } from "./components/Authentication/Login";
 import { Register } from "./components/Authentication/Register";
 import { Dashboard } from "./components/Dashboard/Dashboard";
 import { Profile } from "./components/Dashboard/Profile/Profile";
+import { AccountSettings } from "./components/Dashboard/settings/AccountSettings";
+import { PagesSettings } from "./components/Dashboard/settings/PagesSettings";
+import { ProfileSettings } from "./components/Dashboard/settings/ProfileSettings";
 import { Settings } from "./components/Dashboard/settings/Settings";
 import Editor from "./components/Editor/Editor";
 import { Main } from "./components/Main";
@@ -30,7 +33,20 @@ function App() {
         }
       >
         <Route path="profile" element={<Profile title="Profile" />} />
-        <Route path="settings" element={<Settings title="Settings" />} />
+        <Route path="settings" element={<Settings title="Settings" />}>
+          <Route
+            path="profile"
+            element={<ProfileSettings title="Profile Settings" />}
+          />
+          <Route
+            path="account"
+            element={<AccountSettings title="Account Settings" />}
+          />
+          <Route
+            path="pages"
+            element={<PagesSettings title="Pages Settings" />}
+          />
+        </Route>
       </Route>
       <Route
         path="/redirecting"

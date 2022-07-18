@@ -11,7 +11,7 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import React, { useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
 import SettingsIcon from "@mui/icons-material/Settings";
 import BrushOutlinedIcon from "@mui/icons-material/BrushOutlined";
@@ -61,7 +61,11 @@ export const Settings = () => {
               </Typography>
             </Stack>
           </Box>
-          <Button variant="contained" disableElevation href="profile">
+          <Button
+            variant="contained"
+            disableElevation
+            href="/dashboard/profile"
+          >
             Go to your profile
           </Button>
         </Stack>
@@ -84,6 +88,8 @@ export const Settings = () => {
                     value="1"
                     icon={<PersonIcon />}
                     iconPosition="start"
+                    component={Link}
+                    to="profile"
                     sx={{
                       justifyContent: "flex-start",
                       minHeight: "fit-content",
@@ -94,6 +100,8 @@ export const Settings = () => {
                     value="2"
                     icon={<SettingsIcon />}
                     iconPosition="start"
+                    component={Link}
+                    to="account"
                     sx={{
                       justifyContent: "flex-start",
                       minHeight: "fit-content",
@@ -104,6 +112,8 @@ export const Settings = () => {
                     value="3"
                     icon={<BrushOutlinedIcon />}
                     iconPosition="start"
+                    component={Link}
+                    to="pages"
                     sx={{
                       justifyContent: "flex-start",
                       minHeight: "fit-content",

@@ -24,7 +24,6 @@
     "framer-motion": "^6.3.16",
     "grapesjs": "^0.19.5",
     "grapesjs-preset-webpage": "^0.1.11",
-    "grapesjs-react": "^4.0.1-alpha",
     "jquery": "^3.6.0",
     "moment": "^2.29.3",
     "react": "^18.2.0",

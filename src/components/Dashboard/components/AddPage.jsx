@@ -1,40 +1,59 @@
-import React, { useState } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import {
+  Alert,
+  Box,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Skeleton,
+  Slide,
+  Snackbar,
+  Typography,
 } from "@mui/material";
 import { createPage } from "../../../redux/features/page/pageSlice";
 import { useDispatch } from "react-redux";
 import { TextField, Button } from "@mui/material";
 import { useAuth } from "../../../context/AuthProvider";
 
+const SnackbarAlert = forwardRef(function SnackbarAlert(props, ref) {
+  return <Alert ref={ref} elevation={2} {...props} />;
+});
+
+const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 export const AddPage = ({ pageState }) => {
   const [name, setName] = useState("");
   const [open, setOpen] = useState(false);
   const [isValid, setIsValid] = useState(true);
   const [isDuplicated, setIsDuplicated] = useState(false);
+  const [snackBarOpen, setSnackBarOpen] = useState(false);
+  const [show, setShow] = useState(false);
 
   const { currentUser } = useAuth();
   const { pages } = pageState;
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    setTimeout(() => {
+      setShow(true);
+    }, 2000);
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!name) {
       setIsValid(false);
       return;
     }
-
     const userPages = pages.filter((page) => page.userId === currentUser._id);
     if (userPages.find((page) => page.name === name)) {
       setIsDuplicated(true);
       return;
     }
-
     const pageInfo = {
       name: name,
       userId: currentUser._id,
@@ -42,16 +61,52 @@ export const AddPage = ({ pageState }) => {
 
     setOpen(false);
     dispatch(createPage(pageInfo));
+    setSnackBarOpen(true);
     setName("");
     setIsDuplicated(false);
   };
 
   return (
     <>
-      <Button variant="outlined" onClick={() => setOpen(true)}>
-        Create New Page
-      </Button>
-      <Dialog open={open} onClose={() => setOpen(false)}>
+      {!show ? (
+        <Skeleton
+          variant="rectangular"
+          width={"100%"}
+          sx={{ height: { xs: 150, sm: 200 } }}
+        />
+      ) : (
+        <Box
+          onClick={() => setOpen(true)}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height={{ xs: 150, sm: 200 }}
+          borderRadius={1}
+          sx={{
+            cursor: "pointer",
+            backgroundColor: "success.light",
+            transition: "0.3s",
+            "&:hover": {
+              backgroundColor: "error.light",
+              transform: "scale(1.01)",
+            },
+          }}
+        >
+          <Typography
+            fontWeight={500}
+            color="white"
+            sx={{ fontSize: { xs: 20, sm: 24 } }}
+          >
+            Create new page
+          </Typography>
+        </Box>
+      )}
+
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        TransitionComponent={Transition}
+      >
         <DialogTitle>Create Page</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -83,6 +138,27 @@ export const AddPage = ({ pageState }) => {
           <Button onClick={handleSubmit}>Create</Button>
         </DialogActions>
       </Dialog>
+
+      <Snackbar
+        open={snackBarOpen}
+        autoHideDuration={2000}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+      >
+        <SnackbarAlert
+          severity={"info"}
+          onClose={(e, reason) => {
+            if (reason === "clickaway") {
+              return;
+            }
+            setSnackBarOpen(false);
+          }}
+        >
+          {"Page created successfully!"}
+        </SnackbarAlert>
+      </Snackbar>
     </>
   );
 };
