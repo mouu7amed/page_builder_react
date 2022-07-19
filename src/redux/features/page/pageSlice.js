@@ -6,7 +6,7 @@ const initialState = {
   loading: false,
   pages: [],
   error: "",
-  createPgaeLoading: false,
+  createPageLoading: false,
   createPageError: "",
 };
 
@@ -51,17 +51,17 @@ const pageSlice = createSlice({
 
     //POST
     builder.addCase(createPage.pending, (state) => {
-      state.createPgaeLoading = true;
+      state.createPageLoading = true;
     });
 
     builder.addCase(createPage.fulfilled, (state, action) => {
-      state.createPgaeLoading = false;
+      state.createPageLoading = false;
       state.pages.push(action.payload);
       state.createPageError = "";
     });
 
     builder.addCase(createPage.rejected, (state, action) => {
-      state.createPgaeLoading = false;
+      state.createPageLoading = false;
       state.createPageError = action.payload;
     });
   },

@@ -53,8 +53,17 @@ export const AuthProvider = ({ children }) => {
     return imgUrl;
   };
 
+  const uploadImage = async (file) => {
+    const fileRef = ref(storage, `images/${currentUser._id}/${file.name}.png`);
+    const img = await uploadBytes(fileRef, file);
+    const imgUrl = await getDownloadURL(img.ref);
+    return imgUrl;
+  };
+
   return (
-    <AuthContext.Provider value={{ currentUser, login, logout, changeAvatar }}>
+    <AuthContext.Provider
+      value={{ currentUser, login, logout, changeAvatar, uploadImage }}
+    >
       {!loading && children}
     </AuthContext.Provider>
   );

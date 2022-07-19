@@ -60,7 +60,7 @@ export const Main = () => {
             <Typography variant="h3" component={motion.h1} color="primary.main">
               Page Builder
             </Typography>
-            <Typography variant="body" color="text.secondary">
+            <Typography color="text.secondary">
               Powered By Virtual Worker Now Comapny.
             </Typography>
           </Grid>

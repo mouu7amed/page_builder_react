@@ -25,7 +25,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { DatePicker } from "@mui/x-date-pickers";
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { forwardRef, useState } from "react";
 import { updateUser } from "../../../redux/features/user/userSlice";
 import { useDispatch } from "react-redux";
 import { useAuth } from "../../../context/AuthProvider";

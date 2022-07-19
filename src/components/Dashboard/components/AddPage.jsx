@@ -40,7 +40,7 @@ export const AddPage = ({ pageState }) => {
   useEffect(() => {
     setTimeout(() => {
       setShow(true);
-    }, 2000);
+    }, 1000);
   }, []);
 
   const handleSubmit = async (e) => {

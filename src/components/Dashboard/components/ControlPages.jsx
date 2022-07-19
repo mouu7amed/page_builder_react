@@ -11,7 +11,7 @@ export const ControlPages = () => {
   useEffect(() => {
     setTimeout(() => {
       setShow(true);
-    }, 2000);
+    }, 1000);
   }, []);
 
   return (
