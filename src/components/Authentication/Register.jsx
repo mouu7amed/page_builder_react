@@ -392,14 +392,14 @@ export const Register = ({ title }) => {
         </Box>
         {/* End Form */}
 
-        <Typography variant="body" sx={{ mb: 2 }}>
+        <Typography sx={{ mb: 2 }}>
           Already have an account?{" "}
           <Link href="/login" underline="hover">
             Login
           </Link>
         </Typography>
 
-        <Typography variant="body2" color="text.secondary" align="center">
+        <Typography color="text.secondary" align="center">
           Copyright ©{" "}
           <Link color="inherit" href="https://virtualworkernow.com/">
             VWM

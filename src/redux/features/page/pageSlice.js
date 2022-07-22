@@ -28,6 +28,12 @@ export const deletePage = createAsyncThunk("page/delete", async (pageId) => {
   return data;
 });
 
+export const viewPage = createAsyncThunk("page/view", async (pageId) => {
+  const response = await axios.get(`${API_HOST}pages/${pageId}/view`);
+  const data = await response.data;
+  return data;
+});
+
 const pageSlice = createSlice({
   name: "pages",
   initialState,

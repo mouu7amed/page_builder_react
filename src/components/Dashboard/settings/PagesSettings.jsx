@@ -124,7 +124,7 @@ export const PagesSettings = ({ userUid, pageState }) => {
                     >
                       Delete
                     </Button>
-                    <Link href={``} underline="none">
+                    <Link href={`/view/${page._id}`} underline="none">
                       View
                     </Link>
                   </Stack>

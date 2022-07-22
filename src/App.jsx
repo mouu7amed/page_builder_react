@@ -9,6 +9,7 @@ import { PagesSettings } from "./components/Dashboard/settings/PagesSettings";
 import { ProfileSettings } from "./components/Dashboard/settings/ProfileSettings";
 import { Settings } from "./components/Dashboard/settings/Settings";
 import Editor from "./components/Editor/Editor";
+import { ViewPage } from "./components/Editor/ViewPage";
 import { Main } from "./components/Main";
 import { NoMatch } from "./components/Utils/NoMatch";
 import { Redirecting } from "./components/Utils/Redirecting";
@@ -61,6 +62,14 @@ function App() {
         element={
           <RequireAuth>
             <Editor title="Editor" />
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/view/:pageId"
+        element={
+          <RequireAuth>
+            <ViewPage title="View" />
           </RequireAuth>
         }
       />

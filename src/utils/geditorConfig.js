@@ -47,6 +47,10 @@ const geditorConfig = (assets, pageId, uploadImage, currentUser, dispatch) => {
         });
       },
     },
+    // canvas: {
+    //   scripts: ["...script1.js", "...script2.js"],
+    //   styles: ["...style1.css", "...style2.css"],
+    // },
     plugins: [gjsPresetWebage, customCodePlugin],
     pluginsOpts: {
       gjsPresetWebage: {},
@@ -56,6 +60,38 @@ const geditorConfig = (assets, pageId, uploadImage, currentUser, dispatch) => {
 
   const srcs = assets.map((asset) => asset.src);
   editor.AssetManager.add(srcs);
+
+  editor.on("run:preview", () => {
+    editor.DomComponents.getWrapper().onAll(
+      (comp) => comp.is("text") && comp.set({ editable: false })
+    );
+  });
+
+  editor.on("stop:preview", () => {
+    editor.DomComponents.getWrapper().onAll(
+      (comp) => comp.is("text") && comp.set({ editable: false })
+    );
+  });
+
+  const pageDocument = editor.Canvas.getDocument();
+  console.log(pageDocument);
+
+  editor.Panels.addButton("options", [
+    {
+      id: "save-db",
+      className: "fa fa-floppy-o",
+      command: "save-db",
+      attributes: { title: "Save DB" },
+    },
+  ]);
+
+  editor.Commands.add("save-db", {
+    run: function (editor, sender) {
+      sender.set("active", true);
+
+      editor.store();
+    },
+  });
 };
 
 export default geditorConfig;
