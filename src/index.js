@@ -5,8 +5,8 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./redux/app/store";
 import { AuthProvider } from "./context/AuthProvider";
-import "./styles/index.scss";
 import "grapesjs/dist/css/grapes.min.css";
+import "./styles/index.scss";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

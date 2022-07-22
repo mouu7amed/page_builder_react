@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAssets } from "../../redux/features/assets/assetSlice";
-import geditorConfig from "../../Grapesjs/config";
+import geditorConfig from "../../utils/geditorConfig";
 
 const Editor = () => {
   const { pageId } = useParams();
@@ -18,7 +18,13 @@ const Editor = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    geditorConfig(assets, pageId, uploadImage, currentUser, dispatch);
+    const editor = geditorConfig(
+      assets,
+      pageId,
+      uploadImage,
+      currentUser,
+      dispatch
+    );
   }, [assets, pageId, uploadImage, currentUser, dispatch]);
 
   return (

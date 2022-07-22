@@ -12,6 +12,11 @@ html {
   scrollbar-width: none;
 }
 
+html, body{
+  height: 100%;
+  margin: 0;
+}
+
 ::-webkit-scrollbar {
   display: none;
 }

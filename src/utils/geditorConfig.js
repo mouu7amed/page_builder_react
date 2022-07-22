@@ -1,11 +1,14 @@
 import grapesjs from "grapesjs";
 import gjsPresetWebage from "grapesjs-preset-webpage";
+import customCodePlugin from "grapesjs-custom-code";
 import { API_HOST } from "../api";
 import { uploadAsset } from "../redux/features/assets/assetSlice";
 
 const geditorConfig = (assets, pageId, uploadImage, currentUser, dispatch) => {
   const editor = grapesjs.init({
     container: "#editor",
+    allowScripts: 1,
+    exportWrapper: true,
     storageManager: {
       type: "remote",
       autosave: true,
@@ -44,16 +47,15 @@ const geditorConfig = (assets, pageId, uploadImage, currentUser, dispatch) => {
         });
       },
     },
-    plugins: [gjsPresetWebage],
+    plugins: [gjsPresetWebage, customCodePlugin],
     pluginsOpts: {
       gjsPresetWebage: {},
+      customCodePlugin: {},
     },
   });
 
   const srcs = assets.map((asset) => asset.src);
   editor.AssetManager.add(srcs);
-
-  return editor;
 };
 
 export default geditorConfig;
