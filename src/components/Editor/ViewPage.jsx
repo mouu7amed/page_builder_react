@@ -1,41 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPages } from "../../redux/features/page/pageSlice";
+import { useParams } from "react-router-dom";
+import { Box } from "@mui/material";
 
-const page = () => {
+export const ViewPage = ({ title }) => {
+  const dispatch = useDispatch();
+  const pageState = useSelector((state) => state.page);
+  const { pages } = pageState;
+  const { pageId } = useParams();
+  const currentPage = pages.filter((page) => page._id === pageId);
+  console.log(currentPage.map((page) => page.view.doc));
+
+  useEffect(() => {
+    document.title = title;
+    dispatch(fetchPages());
+  }, [title, dispatch]);
+
   return (
     <>
-      <div data-gjs="navbar" class="navbar">
-        <div class="navbar-container">
-          <a href="/" class="navbar-brand"></a>
-          <div id="ibni" class="navbar-burger">
-            <div class="navbar-burger-line"></div>
-            <div class="navbar-burger-line"></div>
-            <div class="navbar-burger-line"></div>
-          </div>
-          <div data-gjs="navbar-items" class="navbar-items-c">
-            <nav data-gjs="navbar-menu" class="navbar-menu">
-              <a href="#" class="navbar-menu-link">
-                Home
-              </a>
-              <a href="#" class="navbar-menu-link">
-                About
-              </a>
-              <a href="#" class="navbar-menu-link">
-                Contact
-              </a>
-            </nav>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="cell"></div>
-        <div class="cell">
-          <div id="ik2vm">Hello everyone!</div>
-        </div>
-      </div>
+      {/* {currentPage.map((page) => (
+        <Box key={page._id}>{page.view.doc}</Box>
+      ))} */}
     </>
   );
-};
-
-export const ViewPage = () => {
-  return page();
 };

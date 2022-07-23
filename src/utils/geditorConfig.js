@@ -3,8 +3,16 @@ import gjsPresetWebage from "grapesjs-preset-webpage";
 import customCodePlugin from "grapesjs-custom-code";
 import { API_HOST } from "../api";
 import { uploadAsset } from "../redux/features/assets/assetSlice";
+import { pushViewPage } from "../redux/features/page/pageSlice";
 
-const geditorConfig = (assets, pageId, uploadImage, currentUser, dispatch) => {
+const geditorConfig = (
+  assets,
+  pageId,
+  uploadImage,
+  currentUser,
+  dispatch,
+  setSnackBarOpen
+) => {
   const editor = grapesjs.init({
     container: "#editor",
     allowScripts: 1,
@@ -73,8 +81,7 @@ const geditorConfig = (assets, pageId, uploadImage, currentUser, dispatch) => {
     );
   });
 
-  const pageDocument = editor.Canvas.getDocument();
-  console.log(pageDocument);
+  const pageDocument = editor.Canvas.getBody();
 
   editor.Panels.addButton("options", [
     {
@@ -88,8 +95,10 @@ const geditorConfig = (assets, pageId, uploadImage, currentUser, dispatch) => {
   editor.Commands.add("save-db", {
     run: function (editor, sender) {
       sender.set("active", true);
-
+      const viewInfo = [pageId, { document: pageDocument }];
+      dispatch(pushViewPage(viewInfo));
       editor.store();
+      setSnackBarOpen(true);
     },
   });
 };
