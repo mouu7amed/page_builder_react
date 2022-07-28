@@ -57,6 +57,9 @@ export const AddPage = ({ pageState }) => {
     const pageInfo = {
       name: name,
       userId: currentUser._id,
+      view: {
+        document: {},
+      },
     };
 
     setOpen(false);

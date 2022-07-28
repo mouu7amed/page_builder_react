@@ -81,8 +81,6 @@ const geditorConfig = (
     );
   });
 
-  const pageDocument = editor.Canvas.getBody();
-
   editor.Panels.addButton("options", [
     {
       id: "save-db",
@@ -95,7 +93,17 @@ const geditorConfig = (
   editor.Commands.add("save-db", {
     run: function (editor, sender) {
       sender.set("active", true);
-      const viewInfo = [pageId, { document: pageDocument }];
+      const html = editor.getHtml();
+      const css = editor.getCss();
+      const data = {
+        html: {
+          body: html,
+        },
+        css: {
+          style: css,
+        },
+      };
+      const viewInfo = [pageId, data];
       dispatch(pushViewPage(viewInfo));
       editor.store();
       setSnackBarOpen(true);
